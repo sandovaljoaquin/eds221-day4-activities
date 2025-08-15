@@ -1,0 +1,115 @@
+---
+title: "For loops revisited"
+format: html
+editor: visual
+---
+
+## Task 1
+```{r}
+weekdays <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+
+transects <- c("Transect A", "Transect B", "Transect C")
+
+for(i in seq_along(weekdays)) {
+  for (j in seq_along(transects)) {
+    print(paste0(weekdays[i],"-", transects[j]))
+  }
+}
+
+```
+
+## Task 2 
+
+```{r}
+force <- function(m, a) {
+  f <- m * a
+  print(paste("The resulting force is", f, "Newtons."))
+}
+
+```
+
+```{r}
+force(m = 12, a = 2)
+```
+
+## Task 3 
+
+```{r}
+# load dplyr for filter function 
+
+library(dplyr)
+
+# Creating vectors 
+
+sci_name <-c("Chanos chanos", "Sphyraena barracuda", "Caranx ignobilis")
+
+common_name <- c("Milkfish", "Great barracuda", "Giant trevally")
+
+a_est <- c(0.0905, 0.0181, 0.0353)
+
+b_est <- c(2.52, 3.27, 3.05)
+
+# combining into data frame 
+
+fish_parms <- data.frame(sci_name, common_name, a_est, b_est)
+
+# make a function 
+
+fish_weight <- function(fish_name, total_length) {
+  fish_sub <- dplyr::filter(fish_parms, common_name == fish_name)
+  
+  wt <- fish_sub$a_est * (total_length ^ fish_sub$b_est) 
+  return(wt)
+}
+
+fish_weight(fish_name = "Milkfish", total_length = 57)
+```
+
+
+```{r}
+# Create a vector 
+length_vector <- seq(from = 0, to = 100, by = 1)
+
+milkfish_weights <- fish_weight(fish_name = "Milkfish", total_length =  length_vector)
+
+milkfish_weights
+
+```
+
+## Task 4 
+```{r}
+
+# Creating a function with variables, wave height, and wave period 
+wave_power <- function(h, t) {
+  Pd <- 0.5* (h^2)* t
+  return(Pd)
+}
+height_vector <- seq(from = 0, to = 3, by = 0.2)
+
+wave_power(h = height_vector, t = 8)
+
+```
+
+## Task 5 
+
+```{r}
+#Wave energy equation for shallow depth 
+
+brenville_waves <- function(water_depth, wave_height, wave_period) {
+  if (water_depth > 12) {
+    message("Using the deep water equation")
+    bren_wave_energy <- 0.5 * (wave_height ^ 2) * wave_period
+  }
+  if (water_depth <= 12) {
+    message("Using the shallow water equation")
+    bren_wave_energy <- 0.81 * (wave_height ^ 2) * wave_period
+  }
+  return(bren_wave_energy)
+}
+
+brenville_waves(water_depth = 5, wave_height = 12, wave_period = 4)
+brenville_waves(water_depth = 15, wave_height = 12, wave_period = 4)
+
+```
+
+
